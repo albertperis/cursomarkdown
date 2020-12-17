@@ -26,7 +26,7 @@ When you click the **Knit** button a document will be generated that includes bo
 Este es archivo de ejemplo
 
 ```{r data}
-eq<-read.csv2(here:here("data","Earthquake_data.csv"), dec=",", stringAsFactor=FALSE)
+eq<-read.csv2(here:here ("data","Earthquake_data.csv"), dec=",", stringAsFactor=FALSE)
 ```
 
 ## Including Plots
