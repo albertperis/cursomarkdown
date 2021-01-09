@@ -1,0 +1,102 @@
+---
+title: "Rmarkdown tarea curso"
+lang: es
+author: "Albert Peris"
+date: "7 de Enero de 2021"
+output: 
+  bookdown::pdf_document2:
+    fig_caption: true
+    number_sections: false
+    toc: false
+    includes:
+      in_header: fuente.sty
+fontsize: 12pt
+bibliography: mi_biblioteca.bib
+csl: Jwlm.csl
+header-includes:
+  - \usepackage[utf8]{inputenc}
+  - \usepackage[left]{lineno}
+  - \linenumbers
+  - \pagenumbering{gobble}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, results = TRUE, warning = FALSE, message = FALSE)
+library(tidyverse)
+getwd()
+```
+## El gato montés en el prepirineo catalán: distribución, ocupación y abundancia.
+
+
+### Resumen
+
+El gato montés es un mesocarnívoro de hábitos discretos, asociado al matorral mediterráneo y a mosaicos de bosques con pastos o cultivos. Es una especie protegida insuficientemente conocida a nivel  de distribución y demografía. Los principales problemas de conservación a los que se enfrenta el gato montés son la destrucción y fragmentación del hábitat y la hibridación con poblaciones asilvestradas de gato doméstico. La generalización del uso de las trampas fotográficas ofrece una gran oportunidad al estudio de la ecología de especies como el gato montés, elusivas y escasamente conocidas. Durante los años 2018 y 2019 ubicamos 20 trampas fotográficas, durante 2 meses cada una y distanciadas entre ellas dos kilómetros aproximadamente, en el Espacio de Interés Natural del Catllarás (nordeste de la Península Ibérica). Es un macizo calizo de la sierra del prepirineo catalán con pinedas de pino silvestre (Pinus sylvestris), hayedos (Fagus silvatica),  bosques mixtos de pino silvestre y roble albar (Quercus pubescens), encinas (Quercus ilex) en las solanas y pino negro (Pinus uncinata) en las cimas. Para analizar los datos empleamos modelos de ocupación que permiten trabajar con detecciones imperfectas. Concretamente, aplicamos los modelos de Royle-Nichols que aportan como resultado la detectabilidad y la abundancia, en función de la ocupación de la especie. Obtuvimos una baja detectabilidad,  en base a rasgos físicos, detectamos gato montés en 6 de las 20 cámaras y una densidad de 0,38 ind./km^2^ (95% IC: 0,07-0.85). Para obtener abundancias poblacionales de gato montés se han utilizado en otros trabajos aproximaciones mediante métodos de captura-recaptura (CMR) y encuentros aleatorios (REM). Los métodos de ocupación que facilitan la interpretación de los datos en base a variables ambientales y con detecciones imperfectas como el utilizado en el presente estudio todavía no se han explotado suficientemente. Los resultados sobre distribuciones y abundancias locales son clave, porque  además de ampliar el conocimiento de la especie, permiten llevar a cabo medidas efectivas de gestión y conservación.
+
+__Palabras clave__: Modelos de ocupación, estimación de densidad, conservación, ecología espacial.
+
+### Introducción
+
+El formato para la bibliografía y las citas en el texto es el de la revista "The Journal of Wildlife Management".
+En una bibiografia confeccionada en Zotero, he preparado bibliografía general para modelos de ocupación (@keever_efficacy_2017, @linden_examining_2017, @nakashima_potentiality_2020), otra específica para trampeo fotográfico y para estimas de abundancia(@peris_baiting_2019, @rogan_influence_2019, @gilbert_abundance_2020). 
+
+### Material y métodos
+Básicamente, describiré el trampeo fotográfico como técnica de estudio, las campañas de muestreo y los modelos estadísticos empleados.
+
+### Resultados
+
+En este apartado presentaré los resultados y citaré la figura \@ref(fig:figura1) y las tablas \@ref(tab:tabla1) y \@ref(tab:tabla2).
+
+
+
+```{r data, echo=TRUE}
+# lectura de archivos
+a<-read.csv2("tablefin.csv")
+
+b<-read.csv2("table.1.csv")
+
+```
+
+
+```{r limpieza}
+a$Species <- car::recode(a$Species, "'ratolins'='microm';'fel_sp'='fel_cat'")
+a.1<-na.omit(a)
+b$Species <- car::recode(b$Species, "'ratolins'='microm';'fel_sp'='fel_cat'")
+b<-na.omit(b)
+b1<-subset(b,Species!="rup_rup" & Species!="ory_cun")
+
+```
+
+
+```{r figura1,fig.cap="Resultados fotográficos", out.width="80%"}
+
+p <- ggplot2::ggplot(b1, aes(x=Species, y=round((Events/Effort)*100, 2))) +
+  xlab("Species") + ylab("RAI")+
+  geom_boxplot()+
+  geom_jitter(shape=16, position=position_jitter(0.2))+
+  theme_classic()+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+p
+```
+
+La media de eventos fotográficos de gato montés es de `r a.1$Eventmean[3]` y la ocupación naive en el área de estudio es `r a.1$OccNaive[3]`.
+
+```{r, tabla1}
+row.names(a.1) <- NULL
+a.2<-a.1[,c(5,1,2,3,4,6)]
+t1<-knitr::kable(a.2 , format = "simple", align = "lccccc" , caption= "Estadísticos de resultados fotográficos por especie") 
+kableExtra::kable_classic(t1, full_width = F)
+```
+
+
+```{r tabla2, results='asis'}
+stargazer::stargazer(b,summary = TRUE,label = "tab:tabla2" ,header = FALSE, title = "Estadísticos para los eventos y el esfuerzo de muestreo") 
+```
+
+\newpage
+### Discusión
+
+El presente apartado lo dedicaré a comparar y contextualizar los resultados con trabajos con similares objetivos (@shannon_recommended_2014@ferreras_improving_2018, @obrien_camera_2020).
+
+
+### Referencias
+
